@@ -145,7 +145,8 @@ public class PythonDockerSandbox extends DockerSandboxTemplate{
 //                callback.close();
             } catch (Exception e) {
                 System.out.println("程序执行异常");
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                executeMessage.setErrorMessage(e.getMessage());
             }
             String message = String.join("", messages).trim();
             String errorMessage = String.join("", errorMessages).trim();
