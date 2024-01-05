@@ -192,7 +192,7 @@ public class PythonDockerSandbox extends DockerSandboxTemplate{
         try {
 //            File solutionName = saveCodeToFile(code, solutionFileName);
 //            System.out.println("solution: " +solutionName.getAbsolutePath());
-            userCodeFile = saveCodeToFile(code, solutionFileName, mainClass, mainFileName);
+            userCodeFile = saveCodeToFile(code, solutionFileName, mainClass, mainFileName).get(1);
             System.out.println("userCodeFile: " +userCodeFile.getAbsolutePath());
         } catch (Exception e) {
             executeCodeResponse.setStatus(ExecutionStatusEnum.SYSTEM_ERROR.getValue());

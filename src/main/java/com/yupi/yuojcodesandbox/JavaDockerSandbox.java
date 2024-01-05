@@ -213,14 +213,15 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
         // 1. 把用户代码保存为文件
         String solutionFileName = SOLUTION_CLASS_NAME + JAVA_SUFFIX;
         String mainFileName = Main_CLASS_NAME + JAVA_SUFFIX;
-        File userCodeFile;
+//        File userCodeFile;
+        List<File> files;
         executeCodeResponse.setTime(0L);
         executeCodeResponse.setMemory(0L);
         try {
 //            File solutionName = saveCodeToFile(code, solutionFileName);
 //            System.out.println("solution: " +solutionName.getAbsolutePath());
-            userCodeFile = saveCodeToFile(code, solutionFileName, mainClass, mainFileName);
-            System.out.println("userCodeFile: " +userCodeFile.getAbsolutePath());
+            files = saveCodeToFile(code, solutionFileName, mainClass, mainFileName);
+//            System.out.println("userCodeFile: " +userCodeFile.getAbsolutePath());
         } catch (Exception e) {
             executeCodeResponse.setStatus(ExecutionStatusEnum.SYSTEM_ERROR.getValue());
             executeCodeResponse.setMessage(ExecutionStatusEnum.SYSTEM_ERROR.getText());
@@ -228,13 +229,21 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
             return executeCodeResponse;
         }
         // 2. 编译代码，得到class文件
-        ExecuteMessage compileFileExecuteMessage = compileFile(userCodeFile);
-        System.out.println("compileFileExecuteMessage: " + compileFileExecuteMessage);
-        if (compileFileExecuteMessage.getExitValue() != 0) {
-            executeCodeResponse.setStatus(ExecutionStatusEnum.COMPILE_ERROR.getValue());
-            executeCodeResponse.setMessage(ExecutionStatusEnum.COMPILE_ERROR.getText());
-            executeCodeResponse.setDetailMessage(compileFileExecuteMessage.getErrorMessage());
-        } else {
+        boolean compileSuccess = true;
+        ExecuteMessage compileFileExecuteMessage = new ExecuteMessage();
+        for (File file : files) {
+            compileFileExecuteMessage = compileFile(file);
+            System.out.println("compileFileExecuteMessage: " + compileFileExecuteMessage);
+            if (compileFileExecuteMessage.getExitValue() != 0) {
+                compileSuccess = false;
+                executeCodeResponse.setStatus(ExecutionStatusEnum.COMPILE_ERROR.getValue());
+                executeCodeResponse.setMessage(ExecutionStatusEnum.COMPILE_ERROR.getText());
+                executeCodeResponse.setDetailMessage(compileFileExecuteMessage.getErrorMessage());
+                break;
+            }
+        }
+        File userCodeFile = files.get(1);
+        if (compileSuccess) {
 //            System.out.println(compileFileExecuteMessage);
 //            String containerId = createAndStartContainer(JDK_DOCKER_IMAGE, userCodeFile.getParent());
             // 3. 执行代码，得到输出结果

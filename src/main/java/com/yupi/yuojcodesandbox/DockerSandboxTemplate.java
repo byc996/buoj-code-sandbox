@@ -35,21 +35,24 @@ public abstract class DockerSandboxTemplate {
      * @param code 用户代码
      * @return
      */
-    public File saveCodeToFile(String code, String solutionFileName,String mainClass,String mainFileName) {
+    public List<File> saveCodeToFile(String code, String solutionFileName,String mainClass,String mainFileName) {
         String userDir = System.getProperty("user.dir");
         String globalCodePathName = userDir + File.separator + GLOBAL_CODE_DIR_NAME;
         // 判断全局代码目录是否存在
         if (!FileUtil.exist(globalCodePathName)) {
             FileUtil.mkdir(globalCodePathName);
         }
+        List<File> files = new ArrayList<>();
         // 把用户的代码隔离存放
         String userCodeParentPath = globalCodePathName + File.separator + UUID.randomUUID();
         String solutionCodePath = userCodeParentPath + File.separator + solutionFileName;
-        FileUtil.writeString(code, solutionCodePath, StandardCharsets.UTF_8);
+        File solutionFile = FileUtil.writeString(code, solutionCodePath, StandardCharsets.UTF_8);
+        files.add(solutionFile);
         String mainCodePath = userCodeParentPath + File.separator + mainFileName;
 //        String userCodePath = userCodeParentPath + File.separator + GLOBAL_JAVA_CLASS_NAME;
-        File userCodeFile = FileUtil.writeString(mainClass, mainCodePath, StandardCharsets.UTF_8);
-        return userCodeFile;
+        File mainClassFile = FileUtil.writeString(mainClass, mainCodePath, StandardCharsets.UTF_8);
+        files.add(mainClassFile);
+        return files;
     }
 
     /**
