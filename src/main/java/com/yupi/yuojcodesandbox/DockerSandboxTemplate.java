@@ -4,8 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.RemoveContainerCmd;
-import com.github.dockerjava.api.command.StopContainerCmd;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
@@ -27,7 +25,7 @@ public abstract class DockerSandboxTemplate {
 
     private static final long TIME_OUT = 5000L;
 
-    private static final String SEPERATION = "MainResult:";
+    private static final String DELIMITER = "MainResult: ";
 
     DockerClient dockerClient = DockerClientBuilder.getInstance().build();
 
@@ -124,10 +122,10 @@ public abstract class DockerSandboxTemplate {
             if (executeMessage.getExitValue() == 0) {
                 // split stdout and result
                 String msg = executeMessage.getMessage();
-                int lastIdx = msg.lastIndexOf(SEPERATION);
+                int lastIdx = msg.lastIndexOf(DELIMITER);
                 if (lastIdx >= 0) {
-                    stdOut.append(msg, 0, lastIdx + SEPERATION.length());
-                    outputList.add(msg.substring(lastIdx + SEPERATION.length()));
+                    stdOut.append(msg, 0, lastIdx + DELIMITER.length());
+                    outputList.add(msg.substring(lastIdx + DELIMITER.length()));
                 } else {
                     stdOut.append(msg);
                     outputList.add("");
