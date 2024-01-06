@@ -124,7 +124,7 @@ public abstract class DockerSandboxTemplate {
                 String msg = executeMessage.getMessage();
                 int lastIdx = msg.lastIndexOf(DELIMITER);
                 if (lastIdx >= 0) {
-                    stdOut.append(msg, 0, lastIdx + DELIMITER.length());
+                    stdOut.append(msg, 0, lastIdx);
                     outputList.add(msg.substring(lastIdx + DELIMITER.length()));
                 } else {
                     stdOut.append(msg);
