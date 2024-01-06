@@ -15,6 +15,7 @@ import com.yupi.yuojcodesandbox.model.ExecuteMessage;
 import com.yupi.yuojcodesandbox.model.LanguageConfig;
 import com.yupi.yuojcodesandbox.model.enums.ExecutionStatusEnum;
 import com.yupi.yuojcodesandbox.utils.ProcessUtils;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.internal.StringType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -139,6 +141,7 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
                 @Override
                 public void onNext(Frame frame) {
                     StreamType streamType = frame.getStreamType();
+                    System.out.println(streamType.toString() + new String(frame.getPayload()));
                     if (StreamType.STDERR.equals(streamType)) {
                         errorMessages.add(new String(frame.getPayload()));
 //                        System.out.println("输出错误结果：" + errorMessage[0]);
