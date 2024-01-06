@@ -9,6 +9,7 @@ import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.InvocationBuilder;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import com.github.dockerjava.core.command.LogContainerResultCallback;
 import com.yupi.yuojcodesandbox.model.ExecuteCodeRequest;
 import com.yupi.yuojcodesandbox.model.ExecuteCodeResponse;
 import com.yupi.yuojcodesandbox.model.ExecuteMessage;
@@ -74,7 +75,6 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
         // 获取默认的dockerclient
         DockerClient dockerClient = DockerClientBuilder.getInstance().build();
 
-
         CreateContainerCmd containerCmd = dockerClient.createContainerCmd(JDK_DOCKER_IMAGE);
         HostConfig hostConfig = new HostConfig();
         hostConfig.withMemory(100 * 1000 * 1000L);
@@ -93,6 +93,7 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
                 .exec();
 //        System.out.println(createContainerResponse);
         String containerId = createContainerResponse.getId();
+
 
         // 启动容器
         dockerClient.startContainerCmd(containerId).exec();
@@ -140,7 +141,7 @@ public class JavaDockerSandbox extends DockerSandboxTemplate{
                 @Override
                 public void onNext(Frame frame) {
                     StreamType streamType = frame.getStreamType();
-                    System.out.println(streamType.toString() + new String(frame.getPayload()));
+//                    System.out.println(streamType.toString() + new String(frame.getPayload()));
                     if (StreamType.STDERR.equals(streamType)) {
                         errorMessages.add(new String(frame.getPayload()));
 //                        System.out.println("输出错误结果：" + errorMessage[0]);

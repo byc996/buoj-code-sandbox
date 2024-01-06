@@ -127,8 +127,7 @@ public abstract class DockerSandboxTemplate {
                     stdOut.append(msg, 0, lastIdx);
                     outputList.add(msg.substring(lastIdx + DELIMITER.length()));
                 } else {
-                    stdOut.append(msg);
-                    outputList.add("");
+                    outputList.add(msg);
                 }
             } else {
                 // 执行中存在错误
