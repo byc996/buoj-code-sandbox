@@ -15,7 +15,6 @@ import com.yupi.yuojcodesandbox.model.ExecuteMessage;
 import com.yupi.yuojcodesandbox.model.LanguageConfig;
 import com.yupi.yuojcodesandbox.model.enums.ExecutionStatusEnum;
 import com.yupi.yuojcodesandbox.utils.ProcessUtils;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.internal.StringType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
