@@ -27,6 +27,8 @@ public abstract class DockerSandboxTemplate {
 
     private static final long TIME_OUT = 5000L;
 
+    private static final String SEPERATION = "MainResult:";
+
     DockerClient dockerClient = DockerClientBuilder.getInstance().build();
 
     /**
@@ -117,9 +119,19 @@ public abstract class DockerSandboxTemplate {
         // 取用时最大值，便于判断是否超时
         long maxTime = 0;
         long maxMemory = 0;
+        StringBuilder stdOut = new StringBuilder();
         for (ExecuteMessage executeMessage : executeMessageList) {
             if (executeMessage.getExitValue() == 0) {
-                outputList.add(executeMessage.getMessage());
+                // split stdout and result
+                String msg = executeMessage.getMessage();
+                int lastIdx = msg.lastIndexOf(SEPERATION);
+                if (lastIdx >= 0) {
+                    stdOut.append(msg, 0, lastIdx + SEPERATION.length());
+                    outputList.add(msg.substring(lastIdx + SEPERATION.length()));
+                } else {
+                    stdOut.append(msg);
+                    outputList.add("");
+                }
             } else {
                 // 执行中存在错误
                 executeCodeResponse.setStatus(ExecutionStatusEnum.RUNTIME_ERROR.getValue());
@@ -137,6 +149,7 @@ public abstract class DockerSandboxTemplate {
         executeCodeResponse.setOutputList(outputList);
         executeCodeResponse.setTime(maxTime);
         executeCodeResponse.setMemory(maxMemory);
+        executeCodeResponse.setStdOut(stdOut.toString());
 //        JudgeInfo judgeInfo = new JudgeInfo();
 //
 //        judgeInfo.setTime(maxTime);
