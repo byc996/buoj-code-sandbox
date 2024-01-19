@@ -1,3 +1,5 @@
+package com.byc.codesandbox.security;
+
 import java.security.Permission;
 
 public class MySecurityManager extends SecurityManager {

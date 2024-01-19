@@ -8,11 +8,11 @@
         <version>2.7.14</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.yupi</groupId>
-    <artifactId>yuoj-code-sandbox</artifactId>
+    <groupId>com.byc</groupId>
+    <artifactId>buoj-code-sandbox</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>yuoj-code-sandbox</name>
-    <description>yuoj-code-sandbox</description>
+    <name>buoj-code-sandbox</name>
+    <description>buoj-code-sandbox</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
